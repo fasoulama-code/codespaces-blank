@@ -1,6 +1,6 @@
-# morrow — creative performance, made clearer
+# 2morrow — creative performance, made clearer
 
-Morrow is a clickable prototype for an AI creative-performance copilot. It helps marketers consider how a social post, Story, or Reel might land with their audiences, explore creative recommendations, and understand how campaign results could improve future suggestions.
+2morrow is a clickable prototype for an AI creative-performance copilot. It helps marketers consider how a social post, Story, or Reel might land with their audiences, explore creative recommendations, and understand how campaign results could improve future suggestions. Its visual identity uses a lilac, lavender, and purple palette.
 
 ## Run the prototype
 
