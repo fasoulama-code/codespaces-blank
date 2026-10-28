@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f5f1">
+  <title>morrow — creative performance, made clearer</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --ink: #20231f;
+      --muted: #81857e;
+      --line: #e9e9e3;
+      --paper: #fff;
+      --canvas: #f6f5f1;
+      --green: #245c46;
+      --green-soft: #edf4ee;
+      --purple: #7658c9;
+      --purple-soft: #f1edfc;
+      --orange: #e98a57;
+      --orange-soft: #fff2ea;
+      --shadow: 0 12px 40px rgb(34 42 32 / 5%);
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--canvas); font-family: "DM Sans", sans-serif; font-size: 14px; }
+    button, input, select { font: inherit; }
+    button { color: inherit; cursor: pointer; }
+    .app { display: flex; min-height: 100vh; }
+    .sidebar { position: fixed; inset: 0 auto 0 0; z-index: 4; display: flex; width: 238px; flex-direction: column; padding: 27px 17px 18px; border-right: 1px solid var(--line); background: #fbfaf7; }
+    .brand { display: flex; align-items: center; gap: 10px; padding: 0 10px; font-family: Manrope, sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -1.2px; }
+    .brand-mark { display: grid; width: 29px; height: 29px; place-items: center; border-radius: 10px; color: white; background: var(--green); }
+    .brand-mark svg { width: 17px; }
+    .workspace { display: flex; align-items: center; gap: 10px; margin: 29px 0 30px; padding: 11px 10px; border: 1px solid var(--line); border-radius: 11px; background: white; }
+    .avatar { display: grid; width: 30px; height: 30px; flex: 0 0 auto; place-items: center; border-radius: 9px; color: #70464e; background: #f2ded7; font-weight: 700; }
+    .workspace-copy { min-width: 0; flex: 1; }
+    .workspace-copy strong { display: block; overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+    .workspace-copy small { color: var(--muted); font-size: 11px; }
+    .nav-label { padding: 0 10px 9px; color: #a0a29b; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; }
+    .nav { display: grid; gap: 4px; }
+    .nav-button { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 11px; border: 0; border-radius: 9px; color: #686d66; background: transparent; text-align: left; font-size: 13px; font-weight: 500; transition: .18s ease; }
+    .nav-button:hover { color: var(--ink); background: #f0efe9; }
+    .nav-button.active { color: var(--green); background: #eaf0e9; font-weight: 700; }
+    .nav-icon { display: grid; width: 17px; height: 17px; place-items: center; font-size: 16px; }
+    .nav-pill { margin-left: auto; padding: 3px 7px; border-radius: 12px; color: var(--purple); background: var(--purple-soft); font-size: 10px; font-weight: 700; }
+    .sidebar-bottom { margin-top: auto; }
+    .learning-note { margin: 0 3px 17px; padding: 14px; border: 1px solid #e8e2d5; border-radius: 12px; background: #f5f0e5; }
+    .learning-note .sparkle { color: #a77a31; font-size: 16px; }
+    .learning-note strong { display: block; margin: 7px 0 4px; font-size: 12px; }
+    .learning-note p { margin: 0; color: #777568; font-size: 11px; line-height: 1.5; }
+    .profile { display: flex; align-items: center; gap: 10px; padding: 12px 9px 0; border-top: 1px solid var(--line); }
+    .profile .avatar { color: #466c4e; background: #deebdc; }
+    .profile strong { display: block; font-size: 12px; }
+    .profile small { color: var(--muted); font-size: 11px; }
+    main { width: calc(100% - 238px); min-height: 100vh; margin-left: 238px; }
+    .topbar { position: sticky; top: 0; z-index: 3; display: flex; height: 68px; align-items: center; justify-content: space-between; padding: 0 42px; border-bottom: 1px solid var(--line); background: rgb(246 245 241 / 93%); backdrop-filter: blur(12px); }
+    .breadcrumbs { color: var(--muted); font-size: 12px; }
+    .breadcrumbs strong { color: var(--ink); font-weight: 600; }
+    .top-actions { display: flex; align-items: center; gap: 13px; }
+    .level-select { padding: 8px 11px; border: 1px solid var(--line); border-radius: 8px; color: #60645d; background: white; font-size: 11px; }
+    .icon-button { display: grid; width: 34px; height: 34px; place-items: center; border: 1px solid var(--line); border-radius: 9px; background: white; }
+    .online { display: flex; align-items: center; gap: 7px; color: #777b74; font-size: 11px; }
+    .online i { width: 7px; height: 7px; border-radius: 50%; background: #58ae77; }
+    .content { width: min(1120px, 100%); margin: 0 auto; padding: 38px 42px 60px; }
+    .welcome { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 26px; }
+    .eyebrow { margin-bottom: 9px; color: var(--green); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 7px; font-family: Manrope, sans-serif; font-size: clamp(26px, 3vw, 35px); font-weight: 700; letter-spacing: -1.7px; }
+    .welcome p { margin-bottom: 0; color: var(--muted); font-size: 13px; }
+    .button-primary, .button-secondary { display: inline-flex; min-height: 38px; align-items: center; justify-content: center; gap: 8px; padding: 0 14px; border: 1px solid transparent; border-radius: 8px; font-size: 12px; font-weight: 600; transition: .18s ease; }
+    .button-primary { color: white; background: var(--green); }
+    .button-primary:hover { background: #194733; transform: translateY(-1px); }
+    .button-secondary { border-color: var(--line); background: white; }
+    .button-secondary:hover { border-color: #c9cfc5; background: #fbfbf9; }
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .stat-card, .panel { border: 1px solid var(--line); border-radius: 13px; background: var(--paper); box-shadow: var(--shadow); }
+    .stat-card { min-height: 111px; padding: 16px 17px; }
+    .stat-heading { display: flex; align-items: center; justify-content: space-between; color: #777b74; font-size: 11px; }
+    .stat-emoji { font-size: 15px; }
+    .stat-value { margin-top: 10px; font-family: Manrope, sans-serif; font-size: 25px; font-weight: 700; letter-spacing: -1px; }
+    .stat-delta { margin-left: 5px; color: #4a9a66; font-family: "DM Sans", sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0; }
+    .stat-sub { margin-top: 2px; color: #a0a29b; font-size: 10px; }
+    .section-heading { display: flex; align-items: center; justify-content: space-between; margin: 27px 0 12px; }
+    .section-heading h2 { margin: 0; font-family: Manrope, sans-serif; font-size: 16px; letter-spacing: -.4px; }
+    .section-heading .subtle { color: var(--muted); font-size: 11px; }
+    .campaign-panel { padding: 19px; }
+    .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 16px; }
+    .panel-heading h3 { margin: 0 0 3px; font-size: 13px; }
+    .panel-heading p { margin: 0; color: var(--muted); font-size: 11px; }
+    .platforms { display: flex; align-items: center; gap: 6px; }
+    .platform { display: grid; width: 24px; height: 24px; place-items: center; border: 1px solid var(--line); border-radius: 7px; color: #52564f; background: white; font-size: 10px; font-weight: 700; }
+    .platform.instagram { color: #b94e70; }
+    .platform.tiktok { color: #20231f; }
+    .campaign-grid { display: grid; grid-template-columns: minmax(220px, .75fr) 1.25fr; gap: 17px; }
+    .creative-preview { display: flex; min-height: 239px; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #eee8df; border-radius: 10px; background: #f7f0e7; }
+    .mock-post { position: relative; display: flex; width: 175px; height: 217px; flex-direction: column; justify-content: space-between; overflow: hidden; padding: 15px; color: #273a31; background: #e9aa81; transition: background .25s ease; }
+    .mock-post::before { position: absolute; top: 50px; right: -25px; width: 140px; height: 140px; border: 1px solid rgb(255 255 255 / 55%); border-radius: 50%; content: ""; }
+    .mock-post::after { position: absolute; top: 72px; right: -10px; width: 110px; height: 110px; border: 1px solid rgb(255 255 255 / 45%); border-radius: 50%; content: ""; }
+    .mock-post.teal { color: #163d39; background: #87c4b8; }
+    .mock-post.green { color: #244734; background: #a7c59d; }
+    .mock-post .post-top, .mock-post .post-bottom { position: relative; z-index: 1; }
+    .post-top { font-size: 8px; font-weight: 700; letter-spacing: 1.5px; }
+    .post-headline { position: relative; z-index: 1; max-width: 135px; font-family: Manrope, sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -1.4px; line-height: 1.04; transition: font-size .2s ease; }
+    .mock-post.large-text .post-headline { font-size: 28px; }
+    .post-bottom { display: flex; align-items: center; justify-content: space-between; font-size: 8px; }
+    .post-bottom b { font-size: 9px; }
+    .campaign-details { display: flex; flex-direction: column; justify-content: space-between; padding: 3px 1px 0; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .tag { padding: 5px 8px; border-radius: 20px; color: #686d66; background: #f4f4f0; font-size: 10px; }
+    .tag.purple { color: #7058b0; background: var(--purple-soft); }
+    .campaign-details h3 { margin-bottom: 6px; font-family: Manrope, sans-serif; font-size: 18px; letter-spacing: -.6px; }
+    .campaign-details > p { margin-bottom: 15px; color: var(--muted); font-size: 11px; line-height: 1.55; }
+    .forecast-strip { display: flex; flex-wrap: wrap; gap: 18px; padding: 12px 13px; border: 1px solid #eeece6; border-radius: 9px; background: #fafaf8; }
+    .forecast-item { display: flex; align-items: center; gap: 7px; color: #858980; font-size: 10px; }
+    .forecast-item strong { color: #31372f; font-size: 11px; }
+    .forecast-item .arrow { color: #43a26b; font-size: 13px; }
+    .campaign-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; }
+    .campaign-actions .text-link { padding: 5px 0; border: 0; color: var(--green); background: transparent; font-size: 11px; font-weight: 600; }
+    .campaign-actions .button-primary { min-height: 33px; font-size: 11px; }
+    .lower-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 14px; }
+    .recommendations, .audience-panel { padding: 18px; }
+    .recommendation { display: flex; align-items: flex-start; gap: 10px; padding: 12px 0; border-top: 1px solid #f0f0ec; }
+    .recommendation:first-of-type { border-top: 0; }
+    .rec-icon { display: grid; width: 28px; height: 28px; flex: 0 0 auto; place-items: center; border-radius: 8px; background: var(--purple-soft); font-size: 13px; }
+    .rec-icon.green-bg { background: var(--green-soft); }
+    .rec-text { flex: 1; }
+    .rec-text strong { display: block; margin: 1px 0 3px; font-size: 11px; }
+    .rec-text p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+    .rec-impact { flex: 0 0 auto; color: #459767; font-size: 10px; font-weight: 700; }
+    .audience-rows { display: grid; gap: 14px; margin-top: 7px; }
+    .audience-row { display: grid; grid-template-columns: 110px 1fr 34px; align-items: center; gap: 10px; }
+    .audience-label strong { display: block; font-size: 10px; }
+    .audience-label small { color: #a0a29b; font-size: 9px; }
+    .bar-track { height: 6px; overflow: hidden; border-radius: 9px; background: #f0f0ec; }
+    .bar-fill { height: 100%; border-radius: inherit; background: #82b297; }
+    .bar-fill.purple-bar { background: #ab9bdf; }
+    .bar-fill.orange-bar { background: #ebb18b; }
+    .audience-score { color: #555b53; text-align: right; font-size: 10px; font-weight: 700; }
+    .footer-note { margin-top: 12px; color: #a0a29b; font-size: 9px; line-height: 1.5; }
+    .page { display: none; }
+    .page.active { display: block; }
+    .lab-layout { display: grid; grid-template-columns: minmax(250px, .8fr) minmax(350px, 1.2fr); gap: 16px; }
+    .upload-box { display: flex; min-height: 320px; flex-direction: column; align-items: center; justify-content: center; padding: 24px; border: 1.5px dashed #d9ddd5; border-radius: 12px; background: #fcfcfa; text-align: center; transition: .2s; }
+    .upload-box.dragging { border-color: var(--green); background: var(--green-soft); }
+    .upload-icon { display: grid; width: 50px; height: 50px; place-items: center; margin-bottom: 14px; border-radius: 15px; color: var(--green); background: var(--green-soft); font-size: 22px; }
+    .upload-box h3 { margin-bottom: 6px; font-size: 14px; }
+    .upload-box p { max-width: 230px; margin-bottom: 15px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .upload-box .fine-print { margin: 12px 0 0; color: #a0a29b; font-size: 9px; }
+    .file-input { display: none; }
+    .lab-results { padding: 18px; }
+    .result-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+    .result-head h3 { margin: 0; font-size: 13px; }
+    .status-badge { padding: 5px 8px; border-radius: 20px; color: #7259b4; background: var(--purple-soft); font-size: 9px; font-weight: 700; }
+    .analysis-score { display: flex; align-items: center; gap: 13px; margin-bottom: 15px; padding: 12px; border-radius: 9px; background: #f8f7f3; }
+    .score-circle { display: grid; width: 48px; height: 48px; flex: 0 0 auto; place-items: center; border: 3px solid #d5e7d8; border-radius: 50%; color: var(--green); font-family: Manrope, sans-serif; font-size: 15px; font-weight: 800; }
+    .analysis-score strong { display: block; margin-bottom: 3px; font-size: 11px; }
+    .analysis-score p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
+    .tip { display: grid; grid-template-columns: 20px 1fr auto; align-items: start; gap: 9px; padding: 12px 0; border-top: 1px solid #f0f0ec; }
+    .tip-check { width: 16px; height: 16px; margin: 1px 0 0; accent-color: var(--green); cursor: pointer; }
+    .tip strong { display: block; margin-bottom: 3px; font-size: 11px; }
+    .tip p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
+    .tip-impact { color: #459767; font-size: 10px; font-weight: 700; white-space: nowrap; }
+    .lab-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; padding-top: 13px; border-top: 1px solid var(--line); }
+    .lab-footer span { color: var(--muted); font-size: 10px; }
+    .insight-card { padding: 20px; }
+    .forecast-large { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 17px 0; }
+    .forecast-metric { padding: 14px; border: 1px solid #efefe9; border-radius: 10px; background: #fcfcfa; }
+    .forecast-metric span { color: var(--muted); font-size: 10px; }
+    .forecast-metric strong { display: block; margin: 7px 0 3px; font-family: Manrope, sans-serif; font-size: 22px; letter-spacing: -.8px; }
+    .forecast-metric small { color: #4a9a66; font-size: 9px; }
+    .chart { display: flex; height: 165px; align-items: flex-end; gap: 10px; padding: 12px 12px 0; border-bottom: 1px solid #efefe9; background: repeating-linear-gradient(to bottom, transparent 0, transparent 40px, #f3f3ef 41px); }
+    .chart-col { display: flex; flex: 1; height: 100%; flex-direction: column; justify-content: flex-end; align-items: center; gap: 6px; color: #a0a29b; font-size: 9px; }
+    .chart-bar { width: min(30px, 75%); min-height: 10px; border-radius: 5px 5px 0 0; background: #b7d0bc; }
+    .chart-bar.highlight { background: var(--green); }
+    .chart-bar.old { background: #e7e7e1; }
+    .cohort-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; }
+    .cohort-card { padding: 14px; border: 1px solid var(--line); border-radius: 11px; background: white; }
+    .cohort-card .tag { display: inline-block; margin-bottom: 9px; }
+    .cohort-card h3 { margin-bottom: 5px; font-size: 12px; }
+    .cohort-card p { margin-bottom: 9px; color: var(--muted); font-size: 10px; line-height: 1.45; }
+    .fit-line { display: flex; justify-content: space-between; color: #7c8179; font-size: 9px; }
+    .fit-line strong { color: var(--green); }
+    .learning-timeline { display: grid; gap: 0; }
+    .timeline-item { display: grid; grid-template-columns: 25px 1fr auto; gap: 11px; padding: 13px 0; border-top: 1px solid #f0f0ec; }
+    .timeline-dot { display: grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; color: var(--green); background: var(--green-soft); font-size: 11px; }
+    .timeline-item strong { display: block; margin: 2px 0 4px; font-size: 11px; }
+    .timeline-item p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
+    .timeline-date { padding-top: 4px; color: #a0a29b; font-size: 9px; }
+    .toast { position: fixed; right: 24px; bottom: 24px; z-index: 10; max-width: min(360px, calc(100vw - 32px)); padding: 12px 16px; border: 1px solid #dce5da; border-radius: 10px; color: #245c46; background: white; box-shadow: 0 12px 30px rgb(0 0 0 / 11%); font-size: 12px; opacity: 0; pointer-events: none; transform: translateY(10px); transition: .2s ease; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .mobile-menu { display: none; }
+
+    @media (max-width: 960px) {
+      .sidebar { width: 205px; }
+      main { width: calc(100% - 205px); margin-left: 205px; }
+      .content { padding-right: 25px; padding-left: 25px; }
+      .topbar { padding-right: 25px; padding-left: 25px; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .campaign-grid { grid-template-columns: minmax(180px, .7fr) 1.3fr; }
+      .lower-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      .sidebar { width: 64px; align-items: center; padding: 18px 8px; }
+      .brand { padding: 0; }
+      .brand-word, .workspace, .nav-label, .nav-button .nav-text, .nav-pill, .learning-note, .profile .profile-copy, .nav-button .nav-icon + span { display: none; }
+      .nav { margin-top: 35px; }
+      .nav-button { width: 42px; height: 42px; justify-content: center; padding: 0; }
+      .nav-icon { font-size: 18px; }
+      .profile { padding: 13px 0 0; border: 0; }
+      .profile .avatar { width: 34px; height: 34px; }
+      main { width: calc(100% - 64px); margin-left: 64px; }
+      .topbar { height: 58px; padding: 0 14px; }
+      .online { display: none; }
+      .content { padding: 26px 15px 40px; }
+      .welcome { align-items: flex-start; flex-direction: column; gap: 14px; }
+      .welcome .button-primary { align-self: stretch; }
+      .stats { gap: 8px; }
+      .stat-card { min-height: 99px; padding: 12px; }
+      .stat-value { font-size: 21px; }
+      .campaign-panel { padding: 14px; }
+      .campaign-grid { grid-template-columns: 1fr; }
+      .creative-preview { min-height: 225px; }
+      .mock-post { width: 155px; height: 200px; }
+      .campaign-details { gap: 12px; }
+      .forecast-strip { gap: 10px; }
+      .lab-layout { grid-template-columns: 1fr; }
+      .upload-box { min-height: 240px; }
+      .forecast-large, .cohort-grid { grid-template-columns: 1fr; }
+      .forecast-metric { display: flex; align-items: center; justify-content: space-between; }
+      .forecast-metric strong { margin: 0; }
+      .forecast-metric small { display: none; }
+      .audience-row { grid-template-columns: 96px 1fr 30px; gap: 7px; }
+    }
+    @media (max-width: 390px) {
+      .level-select { max-width: 120px; }
+      .top-actions { gap: 7px; }
+      .stat-heading { font-size: 10px; }
+      .forecast-item { font-size: 9px; }
+      .forecast-item strong { font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 13c4.5 0 8-3.5 8-8 3.2 2 4.2 6.1 2.2 9.2C11.3 18.8 4 17 4 13Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M4 16c1-3 3.3-5.3 7-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><span class="brand-word">morrow</span></div>
+      <div class="workspace"><span class="avatar">s</span><div class="workspace-copy"><strong>Sunday Ritual</strong><small>Brand workspace</small></div><span aria-hidden="true">⌄</span></div>
+      <div class="nav-label">Workspace</div>
+      <nav class="nav" aria-label="Main navigation">
+        <button class="nav-button active" data-page="overview"><span class="nav-icon">⌂</span><span class="nav-text">Overview</span></button>
+        <button class="nav-button" data-page="lab"><span class="nav-icon">✳</span><span class="nav-text">Creative lab</span><span class="nav-pill">AI</span></button>
+        <button class="nav-button" data-page="forecast"><span class="nav-icon">↗</span><span class="nav-text">Audience forecast</span></button>
+        <button class="nav-button" data-page="learning"><span class="nav-icon">◷</span><span class="nav-text">Learning journal</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="learning-note"><span class="sparkle">✳</span><strong>Your AI gets smarter with you</strong><p>Every campaign teaches Morrow what resonates with your audience.</p></div>
+        <div class="profile"><span class="avatar">A</span><div class="profile-copy"><strong>Alex Morgan</strong><small>Brand manager</small></div></div>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div class="breadcrumbs">Sunday Ritual <span aria-hidden="true"> / </span> <strong id="breadcrumb">Overview</strong></div>
+        <div class="top-actions">
+          <span class="online"><i></i> Model up to date</span>
+          <select id="experience" class="level-select" aria-label="Your marketing experience">
+            <option>Beginner marketer</option><option selected>Intermediate marketer</option><option>Advanced marketer</option>
+          </select>
+          <button class="icon-button" id="helpButton" aria-label="Help">?</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="page active" id="page-overview">
+          <div class="welcome">
+            <div><div class="eyebrow">Tuesday, October 28</div><h1>Your ideas, a little more effective.</h1><p>Make creative decisions with your audience in mind—not guesswork.</p></div>
+            <button class="button-primary" data-go="lab"><span>＋</span> Review a new creative</button>
+          </div>
+          <div class="stats">
+            <article class="stat-card"><div class="stat-heading">Predicted awareness <span class="stat-emoji">◉</span></div><div class="stat-value" id="awarenessStat">8.4<span class="stat-delta">↑ 18%</span></div><div class="stat-sub">vs. your recent average</div></article>
+            <article class="stat-card"><div class="stat-heading">Audience fit <span class="stat-emoji">◎</span></div><div class="stat-value">86<span class="stat-delta">/ 100</span></div><div class="stat-sub">Based on your target groups</div></article>
+            <article class="stat-card"><div class="stat-heading">Creative reviewed <span class="stat-emoji">✳</span></div><div class="stat-value">12<span class="stat-delta">this month</span></div><div class="stat-sub">3 recommendations applied</div></article>
+            <article class="stat-card"><div class="stat-heading">Learning confidence <span class="stat-emoji">◌</span></div><div class="stat-value">74<span class="stat-delta">+ 6 pts</span></div><div class="stat-sub">Morrow is learning your audience</div></article>
+          </div>
+
+          <div class="section-heading"><h2>Ready for a second look</h2><span class="subtle">1 creative waiting for you</span></div>
+          <article class="panel campaign-panel">
+            <div class="panel-heading">
+              <div><h3>Campaign in progress</h3><p>New creative · Just now · Draft</p></div>
+              <div class="platforms" aria-label="Target social channels"><span class="platform instagram">◎</span><span class="platform">f</span><span class="platform tiktok">♪</span></div>
+            </div>
+            <div class="campaign-grid">
+              <div class="creative-preview"><div class="mock-post" id="postPreview"><div class="post-top">SUNDAY RITUAL</div><div class="post-headline">Slow mornings. Softer skin.</div><div class="post-bottom"><b>Meet your new ritual →</b><span>01 / 03</span></div></div></div>
+              <div class="campaign-details">
+                <div>
+                  <div class="tag-row"><span class="tag">Instagram · Story</span><span class="tag">Awareness</span><span class="tag purple">AI reviewed</span></div>
+                  <h3>A softer kind of morning</h3>
+                  <p>Your new botanical cleanser launch, made for slow mornings. The concept feels warm and on-brand—here’s how to help more of the right people notice it.</p>
+                  <div class="forecast-strip">
+                    <div class="forecast-item"><span class="arrow">↑</span><span>Est. reach <strong id="reachForecast">+18%</strong></span></div>
+                    <div class="forecast-item"><span class="arrow">↑</span><span>Story completion <strong id="completionForecast">+12%</strong></span></div>
+                    <div class="forecast-item"><span>✳</span><span>Audience fit <strong>86 / 100</strong></span></div>
+                  </div>
+                </div>
+                <div class="campaign-actions"><button class="text-link" data-go="forecast">See audience forecast →</button><button class="button-primary" data-go="lab">Explore suggestions <span>→</span></button></div>
+              </div>
+            </div>
+          </article>
+
+          <div class="section-heading"><h2>What Morrow noticed</h2><button class="text-link subtle" data-go="lab" style="border:0;background:transparent;cursor:pointer">See all suggestions →</button></div>
+          <div class="lower-grid">
+            <article class="panel recommendations">
+              <div class="panel-heading"><div><h3>Small shifts, clearer impact</h3><p>Suggestions are yours to accept or ignore.</p></div><span class="status-badge">3 suggestions</span></div>
+              <div class="recommendation"><div class="rec-icon">◐</div><div class="rec-text"><strong>Bring your brand green into the frame</strong><p>A color cue from your palette could make the story feel more recognizably yours.</p></div><span class="rec-impact">+18% recall</span></div>
+              <div class="recommendation"><div class="rec-icon green-bg">Aa</div><div class="rec-text"><strong>Give the headline a little more room</strong><p>Older viewers in your audience may catch the message sooner with larger type.</p></div><span class="rec-impact">+12% completion</span></div>
+              <div class="recommendation"><div class="rec-icon">↗</div><div class="rec-text"><strong>Try moving the product benefit up</strong><p>Lead with the feeling, then let the product name follow.</p></div><span class="rec-impact">+9% recall</span></div>
+            </article>
+            <article class="panel audience-panel">
+              <div class="panel-heading"><div><h3>Who this resonates with</h3><p>Predicted creative fit by audience</p></div><button class="text-link" data-go="forecast" style="border:0;background:transparent;color:var(--green);font-size:10px;font-weight:600;cursor:pointer">Details →</button></div>
+              <div class="audience-rows">
+                <div class="audience-row"><div class="audience-label"><strong>Mindful millennials</strong><small>25–34 · Wellness</small></div><div class="bar-track"><div class="bar-fill" style="width:91%"></div></div><span class="audience-score">91</span></div>
+                <div class="audience-row"><div class="audience-label"><strong>Gen Z explorers</strong><small>18–24 · Skincare</small></div><div class="bar-track"><div class="bar-fill purple-bar" style="width:78%"></div></div><span class="audience-score">78</span></div>
+                <div class="audience-row"><div class="audience-label"><strong>Conscious classics</strong><small>35–44 · Self-care</small></div><div class="bar-track"><div class="bar-fill orange-bar" style="width:84%"></div></div><span class="audience-score">84</span></div>
+              </div>
+              <div class="footer-note">Estimates are directional, based on your brief and past campaign patterns—not a guarantee of results.</div>
+            </article>
+          </div>
+        </section>
+
+        <section class="page" id="page-lab">
+          <div class="welcome"><div><div class="eyebrow">Creative lab</div><h1>Make good creative work harder.</h1><p>Bring a post, story, or reel. Get thoughtful, audience-aware suggestions.</p></div><button class="button-secondary" data-go="overview">← Back to overview</button></div>
+          <div class="lab-layout">
+            <div class="panel upload-box" id="uploadBox">
+              <div class="upload-icon">↑</div><h3>Bring your creative in</h3><p>Drop an image here or choose a file to get audience-aware feedback.</p>
+              <input class="file-input" id="fileInput" type="file" accept="image/*">
+              <button class="button-primary" id="chooseFile">Choose an image</button>
+              <p class="fine-print" id="fileName">PNG or JPG · For this prototype, files stay in your browser</p>
+            </div>
+            <article class="panel lab-results">
+              <div class="result-head"><h3>Your creative, considered</h3><span class="status-badge">Sample analysis</span></div>
+              <div class="analysis-score"><div class="score-circle" id="creativeScore">78</div><div><strong>Good foundation. A few ways to make it land.</strong><p>Warm, calming colors fit your brand. Recommendations below are modeled for your selected audiences.</p></div></div>
+              <div class="tip"><input class="tip-check" type="checkbox" checked data-recommendation="color" aria-label="Apply brand color suggestion"><div><strong>Try your botanical green as an accent</strong><p>Your audience already connects this shade with Sunday Ritual. A subtle border or shape could reinforce recognition.</p></div><span class="tip-impact">+18% recall</span></div>
+              <div class="tip"><input class="tip-check" type="checkbox" checked data-recommendation="type" aria-label="Apply larger headline suggestion"><div><strong>Make the headline easier to catch</strong><p>Increase type size for your 35–44 segment, especially in the first second of the story.</p></div><span class="tip-impact">+12% completion</span></div>
+              <div class="tip"><input class="tip-check" type="checkbox" data-recommendation="layout" aria-label="Apply headline layout suggestion"><div><strong>Move the benefit above the product cue</strong><p>“Softer skin” may earn a pause before the viewer meets the product.</p></div><span class="tip-impact">+9% recall</span></div>
+              <div class="lab-footer"><span>Predictions are estimates—not promises.</span><button class="button-primary" id="applySuggestions">Apply to preview <span>→</span></button></div>
+            </article>
+          </div>
+          <div class="section-heading"><h2>Predicted impact, if you make these changes</h2><span class="subtle">Directional estimate · Instagram Story</span></div>
+          <div class="forecast-large">
+            <article class="forecast-metric"><span>Estimated awareness</span><strong id="labAwareness">8.4 / 10</strong><small>↑ 18% vs. your recent average</small></article>
+            <article class="forecast-metric"><span>Story completion</span><strong id="labCompletion">+12%</strong><small>Audience: Conscious classics</small></article>
+            <article class="forecast-metric"><span>Creative–audience fit</span><strong id="labFit">86 / 100</strong><small>3 audience groups modeled</small></article>
+          </div>
+        </section>
+
+        <section class="page" id="page-forecast">
+          <div class="welcome"><div><div class="eyebrow">Audience forecast</div><h1>A clearer picture of who might care.</h1><p>Explore how this creative could resonate across the audiences in your brief.</p></div><button class="button-secondary" data-go="overview">← Back to overview</button></div>
+          <article class="panel insight-card">
+            <div class="panel-heading"><div><h3>A softer kind of morning · Instagram Story</h3><p>Estimated performance after applying selected recommendations</p></div><span class="status-badge">Forecast · 74% confidence</span></div>
+            <div class="forecast-large"><div class="forecast-metric"><span>Awareness score</span><strong>8.4 / 10</strong><small>↑ 18% vs. recent average</small></div><div class="forecast-metric"><span>Est. story completion</span><strong>32–38%</strong><small>↑ 12% vs. recent average</small></div><div class="forecast-metric"><span>Audience fit</span><strong>86 / 100</strong><small>Strongest: Mindful millennials</small></div></div>
+            <div class="section-heading"><h2>Possible attention, over 24 hours</h2><span class="subtle">Illustrative index, not a reach promise</span></div>
+            <div class="chart" aria-label="Illustrative attention forecast chart"><div class="chart-col"><div class="chart-bar old" style="height:25%"></div><span>6a</span></div><div class="chart-col"><div class="chart-bar old" style="height:35%"></div><span>9a</span></div><div class="chart-col"><div class="chart-bar old" style="height:52%"></div><span>12p</span></div><div class="chart-col"><div class="chart-bar highlight" style="height:78%"></div><span>3p</span></div><div class="chart-col"><div class="chart-bar highlight" style="height:95%"></div><span>6p</span></div><div class="chart-col"><div class="chart-bar highlight" style="height:70%"></div><span>9p</span></div><div class="chart-col"><div class="chart-bar old" style="height:30%"></div><span>12a</span></div></div>
+          </article>
+          <div class="section-heading"><h2>Fit by audience</h2><span class="subtle">What’s working—and what could work harder</span></div>
+          <div class="cohort-grid">
+            <article class="cohort-card"><span class="tag purple">Strongest fit</span><h3>Mindful millennials</h3><p>25–34 · Wellness · Save & share</p><p>Soft visual pacing and self-care language align with this group’s past engagement.</p><div class="fit-line"><span>Predicted fit</span><strong>91 / 100</strong></div></article>
+            <article class="cohort-card"><span class="tag">Room to grow</span><h3>Gen Z explorers</h3><p>18–24 · Skincare · Watch & react</p><p>Try a quicker opening or a more unexpected first frame to earn the pause.</p><div class="fit-line"><span>Predicted fit</span><strong>78 / 100</strong></div></article>
+            <article class="cohort-card"><span class="tag">Strong fit</span><h3>Conscious classics</h3><p>35–44 · Self-care · Read & consider</p><p>A clearer headline and legible type could make the benefit easier to absorb.</p><div class="fit-line"><span>Predicted fit</span><strong>84 / 100</strong></div></article>
+          </div>
+          <p class="footer-note">Forecasts are directional, generated from the campaign brief and limited historical patterns. Actual results vary by timing, spend, creative, and platform.</p>
+        </section>
+
+        <section class="page" id="page-learning">
+          <div class="welcome"><div><div class="eyebrow">Learning journal</div><h1>Every campaign makes the next one wiser.</h1><p>Here’s how real campaign results can tune future creative suggestions.</p></div><button class="button-secondary" data-go="overview">← Back to overview</button></div>
+          <article class="panel insight-card">
+            <div class="panel-heading"><div><h3>Your learning so far</h3><p>A transparent record of what Morrow has picked up for Sunday Ritual.</p></div><span class="status-badge">74% confidence</span></div>
+            <div class="forecast-large"><div class="forecast-metric"><span>Connected channels</span><strong>3</strong><small>Instagram · Facebook · TikTok</small></div><div class="forecast-metric"><span>Campaigns learned from</span><strong>12</strong><small>Across your brand workspace</small></div><div class="forecast-metric"><span>Audience signals</span><strong>38</strong><small>Engagement patterns observed</small></div></div>
+            <div class="section-heading"><h2>What changed the recommendations</h2><button class="button-secondary" id="syncButton">↻ Simulate results sync</button></div>
+            <div class="learning-timeline" id="timeline">
+              <div class="timeline-item"><span class="timeline-dot">↗</span><div><strong>Calm, natural colors earn more saves</strong><p>Recent Stories with softer greens received more saves from Mindful millennials. Color suggestions now prioritize your botanical palette.</p></div><span class="timeline-date">Oct 24</span></div>
+              <div class="timeline-item"><span class="timeline-dot">Aa</span><div><strong>Larger story headlines improved completion</strong><p>Readable first-frame text helped viewers aged 35–44 stay with the story. Type-size suggestions now reflect that pattern.</p></div><span class="timeline-date">Oct 18</span></div>
+              <div class="timeline-item"><span class="timeline-dot">✳</span><div><strong>Your brand voice is taking shape</strong><p>Plainspoken, sensory language performed more consistently than product-first captions in your last 6 campaigns.</p></div><span class="timeline-date">Oct 12</span></div>
+            </div>
+          </article>
+          <div class="section-heading"><h2>A note on learning</h2></div>
+          <article class="panel insight-card"><p style="margin:0;color:var(--muted);font-size:12px;line-height:1.7">Morrow only learns from connected campaign performance and the creative choices you make. Early suggestions are informed estimates—not guarantees. As more results come in, recommendations adapt to your brand, your audiences, and what actually works for you.</p></article>
+        </section>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script>
+    const pages = ["overview", "lab", "forecast", "learning"];
+    const pageNames = { overview: "Overview", lab: "Creative lab", forecast: "Audience forecast", learning: "Learning journal" };
+    const toast = document.getElementById("toast");
+    let toastTimer;
+    let uploadedImageUrl = null;
+    let applied = false;
+
+    function notify(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+
+    function navigate(page) {
+      if (!pages.includes(page)) return;
+      document.querySelectorAll(".page").forEach(section => section.classList.toggle("active", section.id === `page-${page}`));
+      document.querySelectorAll(".nav-button").forEach(button => button.classList.toggle("active", button.dataset.page === page));
+      document.getElementById("breadcrumb").textContent = pageNames[page];
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.querySelectorAll("[data-go]").forEach(button => button.addEventListener("click", () => navigate(button.dataset.go)));
+    document.querySelectorAll(".nav-button").forEach(button => button.addEventListener("click", () => navigate(button.dataset.page)));
+
+    document.getElementById("experience").addEventListener("change", event => {
+      const hints = {
+        "Beginner marketer": "Beginner view: plain-language suggestions and simple next steps are on.",
+        "Intermediate marketer": "Intermediate view: your forecast includes audience fit and estimated KPI changes.",
+        "Advanced marketer": "Advanced view: audience segments and modeled performance ranges are ready to explore."
+      };
+      notify(hints[event.target.value]);
+    });
+
+    document.getElementById("helpButton").addEventListener("click", () => notify("Start with a campaign idea, explore the suggestions, then see how each audience might respond."));
+
+    const fileInput = document.getElementById("fileInput");
+    const uploadBox = document.getElementById("uploadBox");
+    document.getElementById("chooseFile").addEventListener("click", () => fileInput.click());
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files && fileInput.files[0];
+      if (!file) return;
+      if (!file.type.startsWith("image/")) {
+        notify("Please choose an image file (PNG or JPG).");
+        fileInput.value = "";
+        return;
+      }
+      if (uploadedImageUrl) URL.revokeObjectURL(uploadedImageUrl);
+      uploadedImageUrl = URL.createObjectURL(file);
+      document.getElementById("postPreview").style.backgroundImage = `url("${uploadedImageUrl}")`;
+      document.getElementById("postPreview").style.backgroundSize = "cover";
+      document.getElementById("postPreview").style.backgroundPosition = "center";
+      document.getElementById("fileName").textContent = `${file.name} · Preview only; your image stays in this browser`;
+      notify("Creative added to your preview. Your original file is not uploaded.");
+    });
+    uploadBox.addEventListener("dragover", event => { event.preventDefault(); uploadBox.classList.add("dragging"); });
+    uploadBox.addEventListener("dragleave", () => uploadBox.classList.remove("dragging"));
+    uploadBox.addEventListener("drop", event => {
+      event.preventDefault();
+      uploadBox.classList.remove("dragging");
+      const file = event.dataTransfer.files && event.dataTransfer.files[0];
+      if (!file) return;
+      if (!file.type.startsWith("image/")) { notify("Please choose an image file (PNG or JPG)."); return; }
+      const transfer = new DataTransfer();
+      transfer.items.add(file);
+      fileInput.files = transfer.files;
+      fileInput.dispatchEvent(new Event("change"));
+    });
+
+    document.getElementById("applySuggestions").addEventListener("click", () => {
+      const selected = [...document.querySelectorAll("[data-recommendation]:checked")].map(input => input.dataset.recommendation);
+      const preview = document.getElementById("postPreview");
+      preview.classList.toggle("teal", selected.includes("color"));
+      preview.classList.toggle("large-text", selected.includes("type"));
+      preview.classList.toggle("green", selected.includes("layout") && !selected.includes("color"));
+      const awareness = 5.2 + (selected.length * 1.05);
+      const completion = selected.includes("type") ? "+12%" : "+4%";
+      const fit = 68 + selected.length * 6;
+      document.getElementById("labAwareness").textContent = `${awareness.toFixed(1)} / 10`;
+      document.getElementById("labCompletion").textContent = completion;
+      document.getElementById("labFit").textContent = `${fit} / 100`;
+      document.getElementById("reachForecast").textContent = `+${selected.length * 6}%`;
+      document.getElementById("completionForecast").textContent = completion;
+      document.getElementById("creativeScore").textContent = fit;
+      document.getElementById("awarenessStat").innerHTML = `${awareness.toFixed(1)}<span class="stat-delta">↑ ${selected.length * 6}%</span>`;
+      applied = true;
+      notify("Preview updated. These sample estimates are illustrative, not measured results.");
+    });
+
+    document.getElementById("syncButton").addEventListener("click", () => {
+      const timeline = document.getElementById("timeline");
+      const item = document.createElement("div");
+      item.className = "timeline-item";
+      item.innerHTML = '<span class="timeline-dot">↻</span><div><strong>Results sync simulated</strong><p>This prototype does not connect to social accounts. In the full app, approved campaign metrics would inform future suggestions.</p></div><span class="timeline-date">Just now</span>';
+      timeline.prepend(item);
+      notify("Demo sync complete. No social accounts were contacted.");
+    });
+
+    window.addEventListener("beforeunload", () => { if (uploadedImageUrl) URL.revokeObjectURL(uploadedImageUrl); });
+  </script>
+</body>
+</html>
