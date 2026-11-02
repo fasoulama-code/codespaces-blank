@@ -23,6 +23,24 @@
       --shadow: 0 12px 40px rgb(34 42 32 / 5%);
     }
 
+    body[data-experience="beginner"] {
+      --canvas: #f3faf6;
+      --primary: #1b7e67;
+      --primary-soft: #e3f4ed;
+      --purple: #2d856c;
+      --purple-soft: #eaf9f3;
+      --shadow: 0 12px 40px rgb(29 80 66 / 6%);
+    }
+
+    body[data-experience="advanced"] {
+      --canvas: #f5f4fd;
+      --primary: #4a46a2;
+      --primary-soft: #eceaff;
+      --purple: #5f5bc0;
+      --purple-soft: #f0efff;
+      --shadow: 0 12px 40px rgb(48 43 104 / 6%);
+    }
+
     * { box-sizing: border-box; }
     body { margin: 0; color: var(--ink); background: var(--canvas); font-family: "DM Sans", sans-serif; font-size: 14px; }
     button, input, select { font: inherit; }
@@ -53,6 +71,20 @@
     .profile .avatar { color: #684b88; background: #eae0f3; }
     .profile strong { display: block; font-size: 12px; }
     .profile small { color: var(--muted); font-size: 11px; }
+    .profile-edit-button { margin-top: 12px; border: 1px solid var(--line); border-radius: 8px; background: white; color: var(--primary); font-size: 11px; font-weight: 600; padding: 7px 9px; }
+    .profile-edit-button:hover { border-color: #d7cdea; background: #f7f2fb; }
+    .profile-editor { position: fixed; inset: 0; z-index: 40; display: none; align-items: center; justify-content: center; background: rgb(39 31 47 / 35%); backdrop-filter: blur(2px); }
+    .profile-editor.show { display: flex; }
+    .profile-editor-card { width: min(460px, calc(100vw - 28px)); padding: 20px; border: 1px solid #eadff7; border-radius: 14px; background: white; box-shadow: 0 18px 44px rgb(38 30 56 / 16%); }
+    .profile-editor-card h3 { margin: 0 0 8px; font-size: 18px; font-family: Manrope, sans-serif; letter-spacing: -.5px; }
+    .profile-editor-card p { margin: 0 0 16px; color: var(--muted); font-size: 12px; }
+    .profile-form { display: grid; gap: 12px; }
+    .field-group { display: grid; gap: 6px; }
+    .field-group label { color: #595f56; font-size: 11px; font-weight: 600; }
+    .field-group input, .field-group textarea { width: 100%; padding: 10px 11px; border: 1px solid var(--line); border-radius: 8px; background: #fcfbfe; color: var(--ink); font: inherit; }
+    .field-group textarea { min-height: 76px; resize: vertical; }
+    .editor-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px; }
+    .editor-actions .button-secondary, .editor-actions .button-primary { min-height: 34px; }
     main { width: calc(100% - 238px); min-height: 100vh; margin-left: 238px; }
     .topbar { position: sticky; top: 0; z-index: 3; display: flex; height: 68px; align-items: center; justify-content: space-between; padding: 0 42px; border-bottom: 1px solid var(--line); background: rgb(246 243 250 / 93%); backdrop-filter: blur(12px); }
     .breadcrumbs { color: var(--muted); font-size: 12px; }
@@ -100,6 +132,25 @@
     .mock-post.violet { color: #fff; background: #7652ad; }
     .mock-post.lilac { color: #44305d; background: #d3bee9; }
     .mock-post .post-top, .mock-post .post-bottom { position: relative; z-index: 1; }
+    .visual-preview { margin-top: 18px; padding-top: 12px; border-top: 1px solid #f0f0ec; }
+    .visual-preview-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+    .visual-preview-header h4 { margin: 0; font-size: 11px; }
+    .visual-variants { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .visual-variant { padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: #fafaf9; }
+    .visual-variant strong { display: block; margin-bottom: 9px; color: #4a4d47; font-size: 10px; text-transform: uppercase; letter-spacing: .12em; }
+    .mini-post { position: relative; display: flex; width: 100%; max-width: 180px; min-height: 220px; margin: 0 auto; flex-direction: column; justify-content: space-between; overflow: hidden; padding: 14px; color: #39294c; background: #d3c0ea; border-radius: 14px; }
+    .mini-post::before { position: absolute; top: 42px; right: -20px; width: 130px; height: 130px; border: 1px solid rgb(255 255 255 / 55%); border-radius: 50%; content: ""; }
+    .mini-post::after { position: absolute; top: 62px; right: -8px; width: 100px; height: 100px; border: 1px solid rgb(255 255 255 / 45%); border-radius: 50%; content: ""; }
+    .mini-post.after { background: #7652ad; color: #fff; }
+    .mini-post.after .mini-headline { font-size: 27px; }
+    .mini-post.after .mini-body { color: #f6ecff; }
+    .mini-post.before { background: #d8c7ee; color: #39294c; }
+    .mini-post-header, .mini-post-footer { position: relative; z-index: 1; font-size: 8px; font-weight: 700; letter-spacing: 1.2px; }
+    .mini-post-footer { display: flex; align-items: center; justify-content: space-between; }
+    .mini-headline { position: relative; z-index: 1; max-width: 120px; font-family: Manrope, sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -1px; line-height: 1.04; }
+    .mini-body { position: relative; z-index: 1; font-weight: 600; font-size: 9px; }
+    .save-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .save-actions .button-primary, .save-actions .button-secondary { min-height: 32px; font-size: 11px; }
     .post-top { font-size: 8px; font-weight: 700; letter-spacing: 1.5px; }
     .post-headline { position: relative; z-index: 1; max-width: 135px; font-family: Manrope, sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -1.4px; line-height: 1.04; transition: font-size .2s ease; }
     .mock-post.large-text .post-headline { font-size: 28px; }
@@ -245,7 +296,7 @@
   <div class="app">
     <aside class="sidebar">
       <div class="brand"><span class="brand-mark"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 13c4.5 0 8-3.5 8-8 3.2 2 4.2 6.1 2.2 9.2C11.3 18.8 4 17 4 13Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M4 16c1-3 3.3-5.3 7-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><span class="brand-word">2morrow</span></div>
-      <div class="workspace"><span class="avatar">s</span><div class="workspace-copy"><strong>Sunday Ritual</strong><small>Brand workspace</small></div><span aria-hidden="true">⌄</span></div>
+      <div class="workspace"><span class="avatar">s</span><div class="workspace-copy"><strong id="workspaceBrandName">Sunday Ritual</strong><small id="workspaceBrandMeta">Brand workspace</small></div><span aria-hidden="true">⌄</span></div>
       <div class="nav-label">Workspace</div>
       <nav class="nav" aria-label="Main navigation">
         <button class="nav-button active" data-page="overview"><span class="nav-icon">⌂</span><span class="nav-text">Overview</span></button>
@@ -255,7 +306,8 @@
       </nav>
       <div class="sidebar-bottom">
         <div class="learning-note"><span class="sparkle">✳</span><strong>Your AI gets smarter with you</strong><p>Every campaign teaches 2morrow what resonates with your audience.</p></div>
-        <div class="profile"><span class="avatar">A</span><div class="profile-copy"><strong>Alex Morgan</strong><small>Brand manager</small></div></div>
+        <div class="profile"><span class="avatar" id="profileInitials">AM</span><div class="profile-copy"><strong id="profileName">Alex Morgan</strong><small id="profileRole">Brand manager</small></div></div>
+        <button class="profile-edit-button" id="editProfileButton" type="button">Edit profile</button>
       </div>
     </aside>
 
@@ -274,7 +326,7 @@
       <div class="content">
         <section class="page active" id="page-overview">
           <div class="welcome">
-            <div><div class="eyebrow">Tuesday, October 28</div><h1>Your ideas, a little more effective.</h1><p>Make creative decisions with your audience in mind—not guesswork.</p></div>
+            <div><div class="eyebrow">Tuesday, October 28</div><h1 id="overviewHeading">Your ideas, a little more effective.</h1><p id="overviewSubhead">For marketers who want an AI assistant to predict how a post or campaign will perform and recommend the changes that could improve it before publishing.</p></div>
             <button class="button-primary" data-go="lab"><span>＋</span> Review a new creative</button>
           </div>
           <div class="stats">
@@ -311,10 +363,8 @@
           <div class="section-heading"><h2>What 2morrow noticed</h2><button class="text-link subtle" data-go="lab" style="border:0;background:transparent;cursor:pointer">See all suggestions →</button></div>
           <div class="lower-grid">
             <article class="panel recommendations">
-              <div class="panel-heading"><div><h3>Small shifts, clearer impact</h3><p>Suggestions are yours to accept or ignore.</p></div><span class="status-badge">3 suggestions</span></div>
-              <div class="recommendation"><div class="rec-icon">◐</div><div class="rec-text"><strong>Bring your brand lavender into the frame</strong><p>A color cue from your palette could make the story feel more recognizably yours.</p></div><span class="rec-impact">+18% recall</span></div>
-              <div class="recommendation"><div class="rec-icon lilac-bg">Aa</div><div class="rec-text"><strong>Give the headline a little more room</strong><p>Older viewers in your audience may catch the message sooner with larger type.</p></div><span class="rec-impact">+12% completion</span></div>
-              <div class="recommendation"><div class="rec-icon">↗</div><div class="rec-text"><strong>Try moving the product benefit up</strong><p>Lead with the feeling, then let the product name follow.</p></div><span class="rec-impact">+9% recall</span></div>
+              <div class="panel-heading"><div><h3 id="recommendationHeading">Small shifts, clearer impact</h3><p id="recommendationSubheading">Suggestions are yours to accept or ignore.</p></div><span class="status-badge" id="recommendationBadge">3 suggestions</span></div>
+              <div id="recommendationList"></div>
             </article>
             <article class="panel audience-panel">
               <div class="panel-heading"><div><h3>Who this resonates with</h3><p>Predicted creative fit by audience</p></div><button class="text-link" data-go="forecast" style="border:0;background:transparent;color:var(--primary);font-size:10px;font-weight:600;cursor:pointer">Details →</button></div>
@@ -329,7 +379,7 @@
         </section>
 
         <section class="page" id="page-lab">
-          <div class="welcome"><div><div class="eyebrow">Creative lab</div><h1>Make good creative work harder.</h1><p>Bring a post, story, or reel. Get thoughtful, audience-aware suggestions.</p></div><button class="button-secondary" data-go="overview">← Back to overview</button></div>
+          <div class="welcome"><div><div class="eyebrow">Creative lab</div><h1 id="labHeading">Make good creative work harder.</h1><p id="labSubheading">Bring a post, story, or reel. Get thoughtful, audience-aware suggestions.</p></div><button class="button-secondary" data-go="overview">← Back to overview</button></div>
           <div class="lab-layout">
             <div class="panel upload-box" id="uploadBox">
               <div class="upload-icon">↑</div><h3>Bring your creative in</h3><p>Drop an image here or choose a file to get audience-aware feedback.</p>
@@ -339,10 +389,33 @@
             </div>
             <article class="panel lab-results">
               <div class="result-head"><h3>Your creative, considered</h3><span class="status-badge">Sample analysis</span></div>
-              <div class="analysis-score"><div class="score-circle" id="creativeScore">78</div><div><strong>Good foundation. A few ways to make it land.</strong><p>Warm, calming colors fit your brand. Recommendations below are modeled for your selected audiences.</p></div></div>
-              <div class="tip"><input class="tip-check" type="checkbox" checked data-recommendation="color" aria-label="Apply brand color suggestion"><div><strong>Try your brand lavender as an accent</strong><p>Your audience already connects this shade with Sunday Ritual. A subtle border or shape could reinforce recognition.</p></div><span class="tip-impact">+18% recall</span></div>
-              <div class="tip"><input class="tip-check" type="checkbox" checked data-recommendation="type" aria-label="Apply larger headline suggestion"><div><strong>Make the headline easier to catch</strong><p>Increase type size for your 35–44 segment, especially in the first second of the story.</p></div><span class="tip-impact">+12% completion</span></div>
-              <div class="tip"><input class="tip-check" type="checkbox" data-recommendation="layout" aria-label="Apply headline layout suggestion"><div><strong>Move the benefit above the product cue</strong><p>“Softer skin” may earn a pause before the viewer meets the product.</p></div><span class="tip-impact">+9% recall</span></div>
+              <div class="analysis-score"><div class="score-circle" id="creativeScore">78</div><div><strong id="labSummaryTitle">Good foundation. A few ways to make it land.</strong><p id="labSummaryCopy">Warm, calming colors fit your brand. Recommendations below are modeled for your selected audiences.</p></div></div>
+              <div id="labTipsContainer"></div>
+              <div class="visual-preview" aria-live="polite">
+                <div class="visual-preview-header"><h4>Recommendation preview</h4><span class="status-badge">Before / after</span></div>
+                <div class="visual-variants">
+                  <div class="visual-variant">
+                    <strong>Before</strong>
+                    <div class="mini-post before" id="beforePreview">
+                      <div class="mini-post-header">SUNDAY RITUAL</div>
+                      <div class="mini-headline">Slow mornings. Softer skin.</div>
+                      <div class="mini-post-footer"><span class="mini-body">Meet your new ritual</span><span>01 / 03</span></div>
+                    </div>
+                  </div>
+                  <div class="visual-variant">
+                    <strong>After</strong>
+                    <div class="mini-post after" id="afterPreview">
+                      <div class="mini-post-header">SUNDAY RITUAL</div>
+                      <div class="mini-headline">Slow mornings. Softer skin.</div>
+                      <div class="mini-post-footer"><span class="mini-body">Meet your new ritual</span><span>01 / 03</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="save-actions">
+                  <button class="button-primary" id="saveImageButton" type="button">Save image</button>
+                  <button class="button-secondary" id="saveReelButton" type="button">Save reel</button>
+                </div>
+              </div>
               <div class="lab-footer"><span>Predictions are estimates—not promises.</span><button class="button-primary" id="applySuggestions">Apply to preview <span>→</span></button></div>
             </article>
           </div>
@@ -390,13 +463,283 @@
     </main>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="profile-editor" id="profileEditor" aria-hidden="true">
+    <div class="profile-editor-card" role="dialog" aria-modal="true" aria-labelledby="profileEditorTitle">
+      <h3 id="profileEditorTitle">Edit profile</h3>
+      <p>Update your details and how your brand appears in this workspace.</p>
+      <form class="profile-form" id="profileForm">
+        <div class="field-group">
+          <label for="profileNameInput">Name</label>
+          <input id="profileNameInput" name="profileName" type="text" value="Alex Morgan">
+        </div>
+        <div class="field-group">
+          <label for="profileRoleInput">Role</label>
+          <input id="profileRoleInput" name="profileRole" type="text" value="Brand manager">
+        </div>
+        <div class="field-group">
+          <label for="brandNameInput">Brand name</label>
+          <input id="brandNameInput" name="brandName" type="text" value="Sunday Ritual">
+        </div>
+        <div class="field-group">
+          <label for="profileInfoInput">Brand information</label>
+          <textarea id="profileInfoInput" name="profileInfo">Brand workspace</textarea>
+        </div>
+        <div class="editor-actions">
+          <button class="button-secondary" type="button" id="cancelProfileEdit">Cancel</button>
+          <button class="button-primary" type="submit">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
   <script>
     const pages = ["overview", "lab", "forecast", "learning"];
     const pageNames = { overview: "Overview", lab: "Creative lab", forecast: "Audience forecast", learning: "Learning journal" };
+    const experienceContent = {
+      "Beginner marketer": {
+        theme: "beginner",
+        overviewHeading: "A clearer starting point for your next campaign.",
+        overviewSubhead: "For marketers who want an AI assistant to explain how a post might perform and suggest simple, high-confidence changes before publishing.",
+        recommendationHeading: "Easy wins that help your post land",
+        recommendationSubheading: "Friendly suggestions to help you move faster without guesswork.",
+        recommendationBadge: "3 quick tips",
+        recs: [
+          { title: "Lead with the benefit in the first line", desc: "Viewers respond faster when the value is clear in the first second of the post.", impact: "+17% recall", icon: "◐" },
+          { title: "Use your brand color as a gentle anchor", desc: "A smaller accent of your palette helps people recognize the post as yours without overwhelming the frame.", impact: "+15% familiarity", icon: "Aa" },
+          { title: "Keep the CTA simple and visible", desc: "A straightforward action helps new marketers test creative without losing the core message.", impact: "+11% action", icon: "↗" }
+        ],
+        labHeading: "Start simple. Improve confidently.",
+        labSubheading: "Bring a post, story, or reel. Get beginner-friendly guidance that explains what to change and why.",
+        labSummaryTitle: "Strong start. A few small changes could help it feel more clear.",
+        labSummaryCopy: "Your creative is on-brand and easy to understand. These recommendations are designed to help early campaign ideas convert more confidently.",
+        labTips: [
+          { key: "color", title: "Add a brighter brand accent to the headline", desc: "A subtle brand color cue can make the message feel more recognizable in the first glance.", impact: "+17% recall" },
+          { key: "type", title: "Use a bigger headline for first-time viewers", desc: "Larger text makes the promise easier to catch without making the design feel crowded.", impact: "+13% completion" },
+          { key: "layout", title: "Move the customer benefit above the product name", desc: "This keeps the emotional win visible before the brand detail arrives.", impact: "+10% clarity" }
+        ]
+      },
+      "Intermediate marketer": {
+        theme: "intermediate",
+        overviewHeading: "Your ideas, a little more effective.",
+        overviewSubhead: "For marketers who want an AI assistant to predict how a post or campaign will perform and recommend the changes that could improve it before publishing.",
+        recommendationHeading: "Small shifts, clearer impact",
+        recommendationSubheading: "Suggestions are yours to accept or ignore.",
+        recommendationBadge: "3 suggestions",
+        recs: [
+          { title: "Bring your brand lavender into the frame", desc: "A color cue from your palette could make the story feel more recognizably yours.", impact: "+18% recall", icon: "◐" },
+          { title: "Give the headline a little more room", desc: "Older viewers in your audience may catch the message sooner with larger type.", impact: "+12% completion", icon: "Aa" },
+          { title: "Try moving the product benefit up", desc: "Lead with the feeling, then let the product name follow.", impact: "+9% recall", icon: "↗" }
+        ],
+        labHeading: "Make good creative work harder.",
+        labSubheading: "Bring a post, story, or reel. Get thoughtful, audience-aware suggestions.",
+        labSummaryTitle: "Good foundation. A few ways to make it land.",
+        labSummaryCopy: "Warm, calming colors fit your brand. Recommendations below are modeled for your selected audiences.",
+        labTips: [
+          { key: "color", title: "Try your brand lavender as an accent", desc: "Your audience already connects this shade with Sunday Ritual. A subtle border or shape could reinforce recognition.", impact: "+18% recall" },
+          { key: "type", title: "Make the headline easier to catch", desc: "Increase type size for your 35–44 segment, especially in the first second of the story.", impact: "+12% completion" },
+          { key: "layout", title: "Move the benefit above the product cue", desc: "“Softer skin” may earn a pause before the viewer meets the product.", impact: "+9% recall" }
+        ]
+      },
+      "Advanced marketer": {
+        theme: "advanced",
+        overviewHeading: "Audience signals, tuned for sharper decisions.",
+        overviewSubhead: "For experienced marketers who want an AI assistant to model likely performance, compare audience segments, and recommend precise creative changes before launch.",
+        recommendationHeading: "Precision changes with measurable lift",
+        recommendationSubheading: "Optimized for audience-level efficiency and campaign quality.",
+        recommendationBadge: "3 targeted moves",
+        recs: [
+          { title: "Increase the first-frame attention weight", desc: "The strongest gain comes from reorganizing visual hierarchy so the skincare benefit lands before the brand cue.", impact: "+22% attention", icon: "◑" },
+          { title: "Rebalance serif and sans-serif rhythm", desc: "A slightly denser headline weight could improve read-through for your 35–44 segment while maintaining premium tone.", impact: "+16% retention", icon: "Aa" },
+          { title: "Shift the CTA closer to the engagement moment", desc: "Moving the offer nearer the first emotional payoff could increase save-to-view and click-through quality.", impact: "+14% CTR", icon: "↗" }
+        ],
+        labHeading: "Tune the creative to the signal, not the guess.",
+        labSubheading: "Bring a post, story, or reel. Get precision recommendations tied to creative fit, audience intent, and campaign goals.",
+        labSummaryTitle: "High-potential concept. The optimization levers are clear.",
+        labSummaryCopy: "The creative is already aligned with the product story. These audience-specific adjustments can sharpen performance without compromising brand tone.",
+        labTips: [
+          { key: "color", title: "Reinforce brand recognition with a tighter color ratio", desc: "A 22% increase in lavender emphasis could strengthen brand recall for your most engaged cohorts without over-saturating the frame.", impact: "+22% recall" },
+          { key: "type", title: "Prioritize headline hierarchy for late-decider segments", desc: "Increase headline weight and spacing to help slower-scrolling audiences absorb the benefit before the product detail arrives.", impact: "+16% retention" },
+          { key: "layout", title: "Place the conversion cue closer to the emotional payoff", desc: "This helps the call-to-action land where audience attention is most likely to convert.", impact: "+14% CTR" }
+        ]
+      }
+    };
     const toast = document.getElementById("toast");
+    const profileEditor = document.getElementById("profileEditor");
+    const profileNameField = document.getElementById("profileName");
+    const profileRoleField = document.getElementById("profileRole");
+    const profileInitialsField = document.getElementById("profileInitials");
+    const workspaceBrandName = document.getElementById("workspaceBrandName");
+    const workspaceBrandMeta = document.getElementById("workspaceBrandMeta");
+    const profileState = {
+      name: "Alex Morgan",
+      role: "Brand manager",
+      brand: "Sunday Ritual",
+      info: "Brand workspace"
+    };
     let toastTimer;
     let uploadedImageUrl = null;
     let applied = false;
+
+    function renderProfile() {
+      const initials = profileState.name.split(" ").filter(Boolean).slice(0, 2).map(part => part[0]).join("").toUpperCase() || "A";
+      profileNameField.textContent = profileState.name;
+      profileRoleField.textContent = profileState.role;
+      profileInitialsField.textContent = initials;
+      if (workspaceBrandName) workspaceBrandName.textContent = profileState.brand;
+      if (workspaceBrandMeta) workspaceBrandMeta.textContent = profileState.info || "Brand workspace";
+      document.getElementById("profileNameInput").value = profileState.name;
+      document.getElementById("profileRoleInput").value = profileState.role;
+      document.getElementById("brandNameInput").value = profileState.brand;
+      document.getElementById("profileInfoInput").value = profileState.info;
+    }
+
+    function renderRecommendations(level) {
+      const content = experienceContent[level] || experienceContent["Intermediate marketer"];
+      const container = document.getElementById("recommendationList");
+      if (!container) return;
+      container.innerHTML = content.recs.map((item, index) => `
+        <div class="recommendation">
+          <div class="rec-icon${index % 2 === 1 ? " lilac-bg" : ""}">${item.icon}</div>
+          <div class="rec-text">
+            <strong>${item.title}</strong>
+            <p>${item.desc}</p>
+          </div>
+          <span class="rec-impact">${item.impact}</span>
+        </div>
+      `).join("");
+      document.getElementById("recommendationHeading").textContent = content.recommendationHeading;
+      document.getElementById("recommendationSubheading").textContent = content.recommendationSubheading;
+      document.getElementById("recommendationBadge").textContent = content.recommendationBadge;
+    }
+
+    function renderLabTips(level) {
+      const content = experienceContent[level] || experienceContent["Intermediate marketer"];
+      const container = document.getElementById("labTipsContainer");
+      if (!container) return;
+      container.innerHTML = content.labTips.map((tip) => `
+        <div class="tip">
+          <input class="tip-check" type="checkbox" checked data-recommendation="${tip.key}" aria-label="Apply ${tip.title}">
+          <div>
+            <strong>${tip.title}</strong>
+            <p>${tip.desc}</p>
+          </div>
+          <span class="tip-impact">${tip.impact}</span>
+        </div>
+      `).join("");
+      document.getElementById("labHeading").textContent = content.labHeading;
+      document.getElementById("labSubheading").textContent = content.labSubheading;
+      document.getElementById("labSummaryTitle").textContent = content.labSummaryTitle;
+      document.getElementById("labSummaryCopy").textContent = content.labSummaryCopy;
+    }
+
+    function applyExperience(level) {
+      const content = experienceContent[level] || experienceContent["Intermediate marketer"];
+      document.body.dataset.experience = content.theme;
+      document.getElementById("overviewHeading").textContent = content.overviewHeading;
+      document.getElementById("overviewSubhead").textContent = content.overviewSubhead;
+      renderRecommendations(level);
+      renderLabTips(level);
+      const selected = document.getElementById("experience");
+      if (selected && selected.value !== level) selected.value = level;
+    }
+
+    function renderVisualPreview(selected) {
+      const afterPreview = document.getElementById("afterPreview");
+      const beforePreview = document.getElementById("beforePreview");
+      if (!afterPreview || !beforePreview) return;
+
+      afterPreview.classList.toggle("after", true);
+      beforePreview.classList.toggle("after", false);
+      beforePreview.classList.toggle("before", true);
+      afterPreview.classList.toggle("before", false);
+
+      if (selected.includes("color")) {
+        afterPreview.style.background = "linear-gradient(135deg, #7652ad 0%, #a287d8 100%)";
+        afterPreview.style.color = "#fff";
+      } else {
+        afterPreview.style.background = "linear-gradient(135deg, #d3c0ea 0%, #c7b2e4 100%)";
+        afterPreview.style.color = "#39294c";
+      }
+
+      if (selected.includes("type")) {
+        afterPreview.querySelector(".mini-headline").style.fontSize = "27px";
+      } else {
+        afterPreview.querySelector(".mini-headline").style.fontSize = "22px";
+      }
+
+      if (selected.includes("layout")) {
+        afterPreview.querySelector(".mini-body").textContent = "Benefit first";
+      } else {
+        afterPreview.querySelector(".mini-body").textContent = "Meet your new ritual";
+      }
+
+      beforePreview.querySelector(".mini-body").textContent = "Meet your new ritual";
+      beforePreview.querySelector(".mini-headline").style.fontSize = "22px";
+      beforePreview.style.background = "linear-gradient(135deg, #d8c7ee 0%, #d2bfe9 100%)";
+      beforePreview.style.color = "#39294c";
+    }
+
+    function saveCanvas(filename, mode = "image") {
+      const canvas = document.createElement("canvas");
+      const width = mode === "reel" ? 1080 : 900;
+      const height = mode === "reel" ? 1920 : 1200;
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+
+      const gradient = ctx.createLinearGradient(0, 0, width, height);
+      gradient.addColorStop(0, mode === "reel" ? "#f9f4ff" : "#f5f1fb");
+      gradient.addColorStop(1, mode === "reel" ? "#efe5ff" : "#efeafc");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, width, height);
+
+      const cardW = mode === "reel" ? 640 : 560;
+      const cardH = mode === "reel" ? 1120 : 760;
+      const x = (width - cardW) / 2;
+      const y = (height - cardH) / 2;
+      const cardGradient = ctx.createLinearGradient(x, y, x + cardW, y + cardH);
+      cardGradient.addColorStop(0, "#7652ad");
+      cardGradient.addColorStop(1, "#a88ad9");
+      ctx.fillStyle = cardGradient;
+      ctx.fillRect(x, y, cardW, cardH);
+
+      ctx.fillStyle = "rgba(255,255,255,0.18)";
+      ctx.beginPath();
+      ctx.arc(x + cardW - 120, y + 170, 120, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x + cardW - 80, y + 220, 80, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#fff";
+      ctx.font = `700 ${mode === "reel" ? 34 : 26}px 'DM Sans', sans-serif`;
+      ctx.textAlign = "left";
+      ctx.fillText("SUNDAY RITUAL", x + 44, y + 90);
+
+      ctx.font = `800 ${mode === "reel" ? 110 : 78}px 'Manrope', sans-serif`;
+      const headline = "Slow mornings.\nSofter skin.";
+      const lines = headline.split("\n");
+      lines.forEach((line, index) => {
+        ctx.fillText(line, x + 44, y + 300 + index * (mode === "reel" ? 130 : 96));
+      });
+
+      ctx.font = `600 ${mode === "reel" ? 38 : 28}px 'DM Sans', sans-serif`;
+      ctx.fillText("Meet your new ritual", x + 44, y + cardH - 120);
+      ctx.font = `700 ${mode === "reel" ? 34 : 24}px 'DM Sans', sans-serif`;
+      ctx.fillText("01 / 03", x + cardW - 150, y + cardH - 120);
+
+      if (mode === "reel") {
+        ctx.fillStyle = "rgba(255,255,255,0.86)";
+        ctx.fillRect(x + 36, y + cardH + 30, 220, 66);
+        ctx.fillStyle = "#6846a5";
+        ctx.font = "700 26px 'DM Sans', sans-serif";
+        ctx.fillText("REEL", x + 58, y + cardH + 76);
+      }
+
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/png");
+      link.download = filename;
+      link.click();
+    }
 
     function notify(message) {
       toast.textContent = message;
@@ -416,14 +759,48 @@
     document.querySelectorAll("[data-go]").forEach(button => button.addEventListener("click", () => navigate(button.dataset.go)));
     document.querySelectorAll(".nav-button").forEach(button => button.addEventListener("click", () => navigate(button.dataset.page)));
 
+    document.getElementById("editProfileButton").addEventListener("click", () => {
+      renderProfile();
+      profileEditor.classList.add("show");
+      profileEditor.setAttribute("aria-hidden", "false");
+    });
+
+    document.getElementById("cancelProfileEdit").addEventListener("click", () => {
+      profileEditor.classList.remove("show");
+      profileEditor.setAttribute("aria-hidden", "true");
+    });
+
+    profileEditor.addEventListener("click", event => {
+      if (event.target === profileEditor) {
+        profileEditor.classList.remove("show");
+        profileEditor.setAttribute("aria-hidden", "true");
+      }
+    });
+
+    document.getElementById("profileForm").addEventListener("submit", event => {
+      event.preventDefault();
+      profileState.name = document.getElementById("profileNameInput").value.trim() || profileState.name;
+      profileState.role = document.getElementById("profileRoleInput").value.trim() || profileState.role;
+      profileState.brand = document.getElementById("brandNameInput").value.trim() || profileState.brand;
+      profileState.info = document.getElementById("profileInfoInput").value.trim() || "Brand workspace";
+      renderProfile();
+      profileEditor.classList.remove("show");
+      profileEditor.setAttribute("aria-hidden", "true");
+      notify("Profile and brand details updated.");
+    });
+
     document.getElementById("experience").addEventListener("change", event => {
+      const level = event.target.value;
+      applyExperience(level);
       const hints = {
         "Beginner marketer": "Beginner view: plain-language suggestions and simple next steps are on.",
         "Intermediate marketer": "Intermediate view: your forecast includes audience fit and estimated KPI changes.",
         "Advanced marketer": "Advanced view: audience segments and modeled performance ranges are ready to explore."
       };
-      notify(hints[event.target.value]);
+      notify(hints[level]);
     });
+
+    applyExperience("Intermediate marketer");
 
     document.getElementById("helpButton").addEventListener("click", () => notify("Start with a campaign idea, explore the suggestions, then see how each audience might respond."));
 
@@ -466,6 +843,7 @@
       preview.classList.toggle("violet", selected.includes("color"));
       preview.classList.toggle("large-text", selected.includes("type"));
       preview.classList.toggle("lilac", selected.includes("layout") && !selected.includes("color"));
+      renderVisualPreview(selected);
       const awareness = 5.2 + (selected.length * 1.05);
       const completion = selected.includes("type") ? "+12%" : "+4%";
       const fit = 68 + selected.length * 6;
@@ -478,6 +856,16 @@
       document.getElementById("awarenessStat").innerHTML = `${awareness.toFixed(1)}<span class="stat-delta">↑ ${selected.length * 6}%</span>`;
       applied = true;
       notify("Preview updated. These sample estimates are illustrative, not measured results.");
+    });
+
+    document.getElementById("saveImageButton").addEventListener("click", () => {
+      saveCanvas("2morrow-post-image.png", "image");
+      notify("Image exported to your downloads.");
+    });
+
+    document.getElementById("saveReelButton").addEventListener("click", () => {
+      saveCanvas("2morrow-reel-poster.png", "reel");
+      notify("Reel mockup exported to your downloads.");
     });
 
     document.getElementById("syncButton").addEventListener("click", () => {
