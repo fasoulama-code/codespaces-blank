@@ -1,4 +1,4 @@
-# 2morrow v3 — creative performance, made clearer
+# 2morrow — creative performance, made clearer
 
 2morrow v3 is a single-page prototype for an AI creative-performance copilot. It lets marketers explore how a social post, Story, or Reel might resonate with an audience, review creative suggestions, and see how campaign results could inform future recommendations. The interface adapts its guidance and accent colors to the selected marketing experience level.
 
