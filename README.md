@@ -1,17 +1,20 @@
-# 2morrow — creative performance, made clearer
+# 2morrow v3 — creative performance, made clearer
 
-2morrow is a clickable prototype for an AI creative-performance copilot. It helps marketers consider how a social post, Story, or Reel might land with their audiences, explore creative recommendations, and understand how campaign results could improve future suggestions. Its visual identity uses a lilac, lavender, and purple palette.
+2morrow v3 is a single-page prototype for an AI creative-performance copilot. It lets marketers explore how a social post, Story, or Reel might resonate with an audience, review creative suggestions, and see how campaign results could inform future recommendations. The interface adapts its guidance and accent colors to the selected marketing experience level.
 
-## Run the prototype
+## Run it
 
 Open `index.html` in a modern browser. No installation, build step, or account is required.
 
-## Try it
+## Explore the prototype
 
-- Navigate between Overview, Creative lab, Audience forecast, and Learning journal.
-- Choose a marketer experience level in the header to preview tailored guidance.
-- Upload or drag in an image; its preview is created locally in the browser.
-- Toggle recommendations and apply them to see the sample creative and illustrative forecast change.
-- Simulate a results sync to explore the learning-journal flow.
+- **Overview:** Review sample campaign metrics, recommendations, and audience-fit estimates.
+- **Creative lab:** Choose or drag in an image, select recommendations, apply them to the before-and-after preview, and export a sample image or Reel layout.
+- **Audience forecast:** Browse illustrative performance estimates and audience-fit examples.
+- **Learning journal:** Explore sample learning history and simulate a results sync.
+- Change the experience level in the header to see the guidance and accent colors adapt.
+- Edit the sample profile and brand details from the sidebar.
 
-This is a front-end mockup. Forecasts and sample campaign results are illustrative, social accounts are not connected, and nothing is published or sent to a service. Uploaded images remain in your browser.
+## Prototype limitations
+
+This is a front-end mockup. Analysis, recommendations, forecasts, campaign results, and learning history are sample content, not live AI output or performance data. Social accounts are not connected, results sync is simulated, and nothing is published or sent to a service. Uploaded images are handled locally in the browser.
